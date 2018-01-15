@@ -63,7 +63,7 @@ int main(){
      new_line--;       
   }
   if(combinational_matrix.size()==no_vertices+1){
-  cout<<"Graph "<<reference_matrix[0][0]<<" matrix before swapping..."<<endl;
+  cout<<"Reference matrix before swapping..."<<endl;
   for(int i=0;i<reference_matrix.size();i++)
   {
      for(int j=0;j<reference_matrix[i].size();j++)
@@ -72,7 +72,7 @@ int main(){
      }
      cout<<endl;
   }
-  cout<<"Graph "<<combinational_matrix[0][0]<<" matrix before swapping..."<<endl;
+  cout<<"Combinational matrix before swapping..."<<endl;
   for(int i=0;i<combinational_matrix.size();i++)
   {
      for(int j=0;j<combinational_matrix[i].size();j++)
@@ -121,6 +121,7 @@ int main(){
        }
 
        
+       //cout<<"swapping rows for i="<<i<<" :"<<i<<" & "<<index_of_min_match<<endl;
        for(int m=0;m<swap_history.size();m++)
            if(swap_history[m]==to_string(i)+to_string(index_of_min_match) || swap_history[m]==to_string(index_of_min_match)+to_string(i)){
               cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;
@@ -145,10 +146,21 @@ int main(){
           combinational_matrix[j][index_of_min_match]=combinational_matrix[j][i];
           combinational_matrix[j][i]=vertex;
        }
+/*
+  for(int m=0;m<combinational_matrix.size();m++)
+  {
+     for(int n=0;n<combinational_matrix[i].size();n++)
+     {
+         cout<<combinational_matrix[m][n]<<" ";
+     }
+     cout<<endl;
+  }
+*/
+
 
        int swap_column1=0,swap_column2=0;
        vector<int>sub_combinational_matrix1 (&combinational_matrix[i][1],&combinational_matrix[i][combinational_matrix[0].size()]);
-       if(!equal(sub_reference_matrix.begin(), sub_reference_matrix.end(), sub_combinational_matrix1.begin())){
+       if(!equal(sub_reference_matrix.begin(), sub_reference_matrix.end(), sub_combinational_matrix1.begin())){	
          for(int j=0;j<sub_combinational_matrix1.size();j++){
             if(sub_combinational_matrix1[j]!=sub_reference_matrix[j]){
               if(swap_column1==0)
@@ -159,6 +171,12 @@ int main(){
          }
        }
 
+       //cout<<"swapping cols for i="<<i<<" :"<<swap_column1<<" & "<<swap_column2<<endl;
+       if(swap_column1==0 || swap_column2==0)
+       {
+          cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;
+          break;
+       }
        for(int m=0;m<swap_history.size();m++)
            if(swap_history[m]==to_string(swap_column1)+to_string(swap_column2) || swap_history[m]==to_string(swap_column2)+to_string(swap_column1)){
               cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;
@@ -183,6 +201,16 @@ int main(){
           combinational_matrix[swap_column1][j]=combinational_matrix[swap_column2][j];
           combinational_matrix[swap_column2][j]=vertex;
        }
+/*
+  for(int m=0;m<combinational_matrix.size();m++)
+  {
+     for(int n=0;n<combinational_matrix[i].size();n++)
+     {
+         cout<<combinational_matrix[m][n]<<" ";
+     }
+     cout<<endl;
+  }
+*/
 
        i=1;
      }
@@ -198,6 +226,17 @@ int main(){
      }
   }
 
+/*
+  cout<<"Combinational matrix after swapping..."<<endl;
+  for(int i=0;i<combinational_matrix.size();i++)
+  {
+     for(int j=0;j<combinational_matrix[i].size();j++)
+     {
+         cout<<combinational_matrix[i][j]<<" ";
+     }
+     cout<<endl;
+  }
+*/
   combinational_matrix.clear();
   swap_history.clear();
   not_isomorphic=false;
