@@ -15,18 +15,18 @@ int main(){
 
   std::fstream str;
   str.open("input.txt", std::fstream::in);
-  int lines;
+  string lines;
   bool ref=true,not_isomorphic=false;
   int new_line=0;
   while(str >> lines){
   if(new_line==0){
     row=1;
     graph_no++;
-    no_vertices=lines;
+    no_vertices=stoi(lines);
     if(reference_matrix.size()!=0){
       ref=false;
     }
-    new_line=lines;
+    new_line=stoi(lines);
   }
   else{
      vector<int> temp(no_vertices+1,0);
@@ -39,10 +39,14 @@ int main(){
        reference_matrix.push_back(temp);
      }
      temp[0]=row++;
-     while(lines%10!=0){
-        temp[lines%10]=1;
-        lines/=10;
+     size_t pos = 0;
+     string token;
+     while ((pos = lines.find(",")) != string::npos) {
+        token = lines.substr(0, pos);
+        temp[stoi(token)]=1;
+        lines.erase(0, pos + 1);
      }
+     temp[stoi(lines)]=1;
      reference_matrix.push_back(temp);
      }
      else{
@@ -54,10 +58,14 @@ int main(){
        combinational_matrix.push_back(temp);
      }
      temp[0]=row++;
-     while(lines%10!=0){
-        temp[lines%10]=1;
-        lines/=10;
+     size_t pos = 0;
+     string token;
+     while ((pos = lines.find(",")) != string::npos) {
+        token = lines.substr(0, pos);
+        temp[stoi(token)]=1;
+        lines.erase(0, pos + 1);
      }
+     temp[stoi(lines)]=1;
      combinational_matrix.push_back(temp);      
      }
      new_line--;       
@@ -172,7 +180,7 @@ int main(){
        }
 
        //cout<<"swapping cols for i="<<i<<" :"<<swap_column1<<" & "<<swap_column2<<endl;
-       if(swap_column1==0 || swap_column2==0)
+       if((swap_column1==0 || swap_column2==0) && (swap_column1!=0 || swap_column2!=0))
        {
           cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;
           break;
