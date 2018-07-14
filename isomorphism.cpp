@@ -11,10 +11,12 @@ using namespace std;
 int main(){
   vector<vector<int> > reference_matrix;
   vector<vector<int> > combinational_matrix;
-  int graph_no=0,row=0,no_vertices=0;
+  int graph_no=0,row=0,no_vertices=0,no_rotations_switching=0;
+
+  std::string input_file="input_rooted.txt";
 
   std::fstream str;
-  str.open("input.txt", std::fstream::in);
+  str.open(input_file, std::fstream::in);
   string lines;
   bool ref=true,not_isomorphic=false;
   int new_line=0;
@@ -71,7 +73,7 @@ int main(){
      new_line--;       
   }
   if(combinational_matrix.size()==no_vertices+1){
-  cout<<"Reference matrix before swapping..."<<endl;
+  cout<<"Reference matrix before Rotations/Swappings..."<<endl;
   for(int i=0;i<reference_matrix.size();i++)
   {
      for(int j=0;j<reference_matrix[i].size();j++)
@@ -80,7 +82,7 @@ int main(){
      }
      cout<<endl;
   }
-  cout<<"Combinational matrix before swapping..."<<endl;
+  cout<<"Combinational matrix before Rotations/Swappings..."<<endl;
   for(int i=0;i<combinational_matrix.size();i++)
   {
      for(int j=0;j<combinational_matrix[i].size();j++)
@@ -130,16 +132,17 @@ int main(){
        }
 
        
-       //cout<<"swapping rows for i="<<i<<" :"<<i<<" & "<<index_of_min_match<<endl;
-       //cout<<"swapping vertices :"<<combinational_matrix[0][i]<<" & "<<combinational_matrix[0][index_of_min_match]<<endl;
        for(int m=0;m<swap_history.size();m++)
            if((swap_history[m]==to_string(i)+to_string(index_of_min_match) || swap_history[m]==to_string(index_of_min_match)+to_string(i)) && (swap_history_vertex[m]==to_string(combinational_matrix[0][i])+to_string(combinational_matrix[0][index_of_min_match]) || swap_history_vertex[m]==to_string(combinational_matrix[0][index_of_min_match])+to_string(combinational_matrix[0][i])) && index_of_min_match!=i){
               //cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;
-              not_isomorphic=true;
+              //not_isomorphic=true;
               break;
            }
-       //if(not_isomorphic)
-         //break;
+       if(index_of_min_match!=i){
+         no_rotations_switching++;
+         //cout<<"Switching indexes for i="<<i<<" columns: "<<i<<" & "<<index_of_min_match<<endl;
+         //cout<<"Switching vertices :"<<combinational_matrix[0][i]<<" & "<<combinational_matrix[0][index_of_min_match]<<endl;
+       }
        string temp=to_string(i)+to_string(index_of_min_match);
        swap_history.push_back(temp);
        temp=to_string(index_of_min_match)+to_string(i);
@@ -160,17 +163,6 @@ int main(){
           combinational_matrix[j][index_of_min_match]=combinational_matrix[j][i];
           combinational_matrix[j][i]=vertex;
        }
-/*
-  for(int m=0;m<combinational_matrix.size();m++)
-  {
-     for(int n=0;n<combinational_matrix[i].size();n++)
-     {
-         cout<<combinational_matrix[m][n]<<" ";
-     }
-     cout<<endl;
-  }
-*/
-
 
        int swap_column1=0,swap_column2=0;
        vector<int>sub_combinational_matrix1 (&combinational_matrix[i][1],&combinational_matrix[i][combinational_matrix[0].size()]);
@@ -185,15 +177,15 @@ int main(){
          }
        }
 
-       //cout<<"swapping cols for i="<<i<<" :"<<swap_column1<<" & "<<swap_column2<<endl;
-       //cout<<"swapping vertices :"<<combinational_matrix[0][swap_column1]<<" & "<<combinational_matrix[0][swap_column2]<<endl;
        if((swap_column1==0 || swap_column2==0) && (swap_column1!=0 || swap_column2!=0))
        {
+          cout<<endl;
           cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;
+          cout<<endl;
           break;
        }
 
-       not_isomorphic=false;
+       //not_isomorphic=false;
        bool index=false,vertex=false;
        for(int m=0;m<swap_history.size();m++){
            if((swap_history[m]==to_string(swap_column1)+to_string(swap_column2) || swap_history[m]==to_string(swap_column2)+to_string(swap_column1))){
@@ -248,10 +240,30 @@ int main(){
 
          //cout<<"swapping stuck rows for i="<<i<<" :"<<swap_column1<<" & "<<swap_column2<<endl;
          if(no_match){
-           cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;        
-           break;
+           if(i==combinational_matrix.size()-1){
+               cout<<endl;
+               cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl; 
+               cout<<endl;
+               //not_isomorphic=true;       
+               break;
+           }
+           else{
+               continue;
+           }
          }
        }
+
+       if(swap_column2==-1)
+       {
+          cout<<endl;
+          cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are NOT ISOMORPHIC"<<endl;
+          cout<<endl;
+          break;
+       }
+
+       //cout<<"Swapping/Rotating indexes for i="<<i<<" columns: "<<swap_column1<<" & "<<swap_column2<<endl;
+       //cout<<"Swapping/Rotating vertices :"<<combinational_matrix[0][swap_column1]<<" & "<<combinational_matrix[0][swap_column2]<<endl;
+       no_rotations_switching++;
        temp=to_string(swap_column1)+to_string(swap_column2);
        swap_history.push_back(temp);
        temp=to_string(swap_column2)+to_string(swap_column1);
@@ -272,21 +284,13 @@ int main(){
           combinational_matrix[swap_column1][j]=combinational_matrix[swap_column2][j];
           combinational_matrix[swap_column2][j]=vertex;
        }
-/*
-  for(int m=0;m<combinational_matrix.size();m++)
-  {
-     for(int n=0;n<combinational_matrix[i].size();n++)
-     {
-         cout<<combinational_matrix[m][n]<<" ";
-     }
-     cout<<endl;
-  }
-*/
 
        i=0;
      }
      if(i==combinational_matrix.size()-1){
+       cout<<endl;
        cout<<"Graph "<<reference_matrix[0][0]<<" & "<<combinational_matrix[0][0]<<" are ISOMORPHIC"<<endl;
+       cout<<endl;
        cout<<"Mapping of the graphs"<<endl;
        for(int m=1;m<combinational_matrix.size();m++)
           cout<<m<<"\t";
@@ -294,11 +298,11 @@ int main(){
        for(int m=1;m<combinational_matrix.size();m++)
           cout<<combinational_matrix[0][m]<<"\t";
        cout<<endl;
+       cout<<endl;
      }
   }
 
-/*
-  cout<<"Combinational matrix after swapping..."<<endl;
+  cout<<"Combinational matrix after "<<no_rotations_switching<<" Rotations/Swappings..."<<endl;
   for(int i=0;i<combinational_matrix.size();i++)
   {
      for(int j=0;j<combinational_matrix[i].size();j++)
@@ -307,10 +311,14 @@ int main(){
      }
      cout<<endl;
   }
-*/
+  cout<<"##########################################################"<<endl;
+cout<<"##########################################################"<<endl;
+
+  cout<<endl;
   combinational_matrix.clear();
   swap_history.clear();
   not_isomorphic=false;
+  no_rotations_switching=0;
   }
   } 
   str.close();
