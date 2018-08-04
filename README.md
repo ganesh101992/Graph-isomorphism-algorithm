@@ -28,3 +28,57 @@ Each graph has a distinct number which depends on the order/position of the grap
 # TODO
 In this algorithm i tried to find a pattern between set of rotations which results in a configuration that was encountered before. A easier 
 approach is to maintain a list of all the configuration that were encountered and match it with the current, but it is not an efficient solution.
+
+# OUTPUT FORMAT
+1. Reference Matrix which is compared with all the other Matrix.
+2. Combinational Matrix which undergo rotation.
+3. Result: IS OR NOT Isomorphic
+4. Mapping of vertices of the two graphs/matrix.
+5. Combinational Matrix after rotation and number of rotations were performed before getting to the result.
+
+eg:
+Reference matrix before Rotations/Swappings...
+1 1 2 3 4 5 6 7 8 9 10 
+1 0 1 1 1 0 0 0 1 1 1 
+2 1 0 1 1 1 0 0 0 1 1 
+3 1 1 0 1 1 1 0 0 0 1 
+4 1 1 1 0 1 1 1 0 0 0 
+5 0 1 1 1 0 1 1 1 0 0 
+6 0 0 1 1 1 0 1 1 1 0 
+7 0 0 0 1 1 1 0 1 1 1 
+8 1 0 0 0 1 1 1 0 1 1 
+9 1 1 0 0 0 1 1 1 0 1 
+10 1 1 1 0 0 0 1 1 1 0 
+Combinational matrix before Rotations/Swappings...
+2 1 2 3 4 5 6 7 8 9 10 
+1 0 1 0 0 1 1 1 0 1 1 
+2 1 0 1 0 0 1 1 1 0 1 
+3 0 1 0 1 0 1 1 1 1 0 
+4 0 0 1 0 1 0 1 1 1 1 
+5 1 0 0 1 0 1 0 1 1 1 
+6 1 1 1 0 1 0 0 1 1 0 
+7 1 1 1 1 0 0 0 0 1 1 
+8 0 1 1 1 1 1 0 0 0 1 
+9 1 0 1 1 1 1 1 0 0 0 
+10 1 1 0 1 1 0 1 1 0 0 
+
+Graph 1 & 2 are ISOMORPHIC
+
+Mapping of the graphs
+1	2	3	4	5	6	7	8	9	10
+6	3	8	9	4	5	10	7	1	2
+
+Combinational matrix after 55 Rotations/Swappings...
+2 6 3 8 9 4 5 10 7 1 2 
+6 0 1 1 1 0 1 0 0 1 1 
+3 1 0 1 1 1 0 0 1 0 1 
+8 1 1 0 0 1 1 1 0 0 1 
+9 1 1 0 0 1 1 0 1 1 0 
+4 0 1 1 1 0 1 1 1 0 0 
+5 1 0 1 1 1 0 1 0 1 0 
+10 0 0 1 0 1 1 0 1 1 1 
+7 0 1 0 1 1 0 1 0 1 1 
+1 1 0 0 1 0 1 1 1 0 1 
+2 1 1 1 0 0 0 1 1 1 0 
+##########################################################
+##########################################################
